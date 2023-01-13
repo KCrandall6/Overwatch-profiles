@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Navbar, NavbarBrand, Nav, NavItem, NavLink, Button } from 'react-bootstrap';
 
+import navlogo from '../figures/OverwatchPR.png';
+
 function NavBar() {
   const [expanded, setExpanded] = useState(false);
   const navRef = useRef(null);
@@ -13,12 +15,18 @@ function NavBar() {
       };
       document.addEventListener("mousedown", handleClickOutside);
       return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [navRef]);
+  }, []);
 
   return (
       <Navbar ref={navRef} expand="lg">
-          <NavbarBrand href="/">OverWatch Profile App</NavbarBrand>
-          <Button variant="info" size="sm" onClick={() => setExpanded(!expanded)} aria-controls="navbar-collapse" aria-expanded={expanded}>
+          <NavbarBrand href="/">
+            <img
+            alt=''
+            src={navlogo}
+            height='25'
+            />
+            </NavbarBrand>
+          <Button size="sm" onClick={() => setExpanded(!expanded)} aria-controls="navbar-collapse" aria-expanded={expanded}>
               <span className={`navbar-toggler-icon ${expanded ? 'open' : 'closed'}`} />
           </Button>
           <div id="navbar-collapse" className={`collapse navbar-collapse ${expanded ? 'show' : ''}`}>

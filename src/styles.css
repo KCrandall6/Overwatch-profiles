@@ -1,9 +1,15 @@
+@media (min-width: 768px) {
+  .navbar-toggler {
+    display: none;
+  }
+}
+
 .navbar {
   padding: 0 1rem;
-  background-color: aquamarine !important;
+  background-color: #E5E5E5 !important;
 }
 
-.navbar-toggler-icon {
-  --navbar-toggler-icon-bg: white;
-}
-
+/* .navbar-toggler {
+  background-color: #F99B12 !important;
+  --navbar-toggler-bg: purple;
+} */
