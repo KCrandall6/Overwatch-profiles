@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+// import React, { useState, useEffect } from 'react';
 import { Image } from 'react-bootstrap';
 
 import teamlogo from '../../figures/overwatchteam.png';
