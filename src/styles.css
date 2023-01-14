@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital@1&display=swap');
+
+
+
 @media (min-width: 768px) {
   .navbar-toggler {
     display: none;
@@ -9,7 +13,12 @@
   background-color: #E5E5E5 !important;
 }
 
-/* .navbar-toggler {
-  background-color: #F99B12 !important;
-  --navbar-toggler-bg: purple;
-} */
+.divider {
+  width: 100%;
+  height: 1px;
+  background-color: black;
+}
+
+h3 {
+  font-family: 'Source Sans Pro', sans-serif;
+}
