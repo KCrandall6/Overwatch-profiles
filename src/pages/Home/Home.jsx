@@ -1,15 +1,15 @@
-// import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Image } from 'react-bootstrap';
 
 import teamlogo from '../../figures/overwatchteam.png';
 
 const Home = () => {
 
-  // useEffect(() => {
-  //   fetch('https://best-overwatch-api.herokuapp.com/heroes/2')
-  //   .then((res) => res.json())
-  //   .then((res) => console.log('res', res))
-  // }, []);
+  useEffect(() => {
+    fetch('https://overfast-api.tekrop.fr/players/TeKrop-2217/stats/summary')
+    .then((res) => res.json())
+    .then((res) => console.log('res', res))
+  }, []);
 
   return (
     <div className='d-flex flex-column justify-content-center align-items-center text-center p-2'>

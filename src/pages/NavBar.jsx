@@ -34,7 +34,8 @@ function NavBar() {
         <img
           alt='Overwatch PR logo'
           src={navlogo}
-          height='25'
+          height='33'
+          style={{ marginTop: "20px", marginBottom: "20px"}}
         />
       </NavbarBrand>
       { window.matchMedia('(max-width: 768px)').matches && (
@@ -42,9 +43,9 @@ function NavBar() {
           size="sm" 
           onClick={() => setExpanded(!expanded)} aria-controls="navbar-collapse" 
           aria-expanded={expanded}
-          style={{ backgroundColor: "#F99B12", border: "none"}}
+          style={{ backgroundColor: "#E5E5E5", border: "none", height: "50px", width: "30px"}}
           >
-          <span className={`navbar-toggler-icon ${expanded ? 'open' : 'closed'}`} />
+          <span className={`navbar-toggler-icon ${expanded ? 'open' : 'closed'}custom-hamburger`}/>
         </Button>
       ) }
       <div id="navbar-collapse" className={`collapse navbar-collapse ${expanded ? 'show' : ''}`}>

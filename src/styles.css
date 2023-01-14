@@ -19,6 +19,12 @@
   background-color: black;
 }
 
+.custom-hamburger::before,
+.custom-hamburger::after {
+  border-width: 4px;
+}
+
+
 h3 {
   font-family: 'Source Sans Pro', sans-serif;
 }
