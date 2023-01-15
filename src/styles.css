@@ -36,3 +36,14 @@ h3 {
 .card-title {
   font-size: xx-large;
 }
+
+.modal-title {
+  font-size: x-large;
+  overflow-wrap: break-word;
+}
+
+.location {
+  font-size: small;
+  margin-left: 9px;
+  margin-top: 15px;
+}
