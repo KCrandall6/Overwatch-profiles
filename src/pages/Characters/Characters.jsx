@@ -13,8 +13,7 @@ const Characters = () => {
       .then((res) => res.json())
       .then((res) => setCharList(res))
     }
-  }, []);
-
+  }, [searched]);
   
   return (
     <div>
