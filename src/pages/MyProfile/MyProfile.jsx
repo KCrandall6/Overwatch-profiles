@@ -4,7 +4,7 @@ const MyProfile = () => {
 
   return (
     <div>
-      <p>This is my profile</p>
+      <p>COMING SOON</p>
     </div>
   )
 };

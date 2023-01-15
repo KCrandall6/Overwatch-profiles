@@ -28,3 +28,11 @@
 h3 {
   font-family: 'Source Sans Pro', sans-serif;
 }
+
+.char-card {
+  border-width: 2px;
+}
+
+.card-title {
+  font-size: xx-large;
+}

@@ -5,6 +5,7 @@ import { Route, Routes, BrowserRouter } from 'react-router-dom';
 
 import Home from './pages/Home/Home';
 import MyProfile from './pages/MyProfile/MyProfile';
+import Characters from './pages/Characters/Characters';
 import NavBar from './pages/NavBar';
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
     <NavBar/>
       <Routes>
         <Route path='/' element={<Home/>} />
+        <Route path='/characters' element={<Characters/>} />
         <Route path='/myProfile' element={<MyProfile/>} />
       </Routes>
     </BrowserRouter>

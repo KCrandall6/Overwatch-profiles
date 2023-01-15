@@ -54,6 +54,9 @@ function NavBar() {
             <NavLink href="/">Home</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink href="/characters">Characters</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink href="/myprofile">My Profile</NavLink>
           </NavItem>
         </Nav>
