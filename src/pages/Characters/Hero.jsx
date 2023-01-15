@@ -1,20 +1,26 @@
 import React from 'react';
+import {Button, Modal} from 'react-bootstrap';
 
-const Hero = () => {
+const Hero = ({hero, show, handleClose}) => {
 
+  // const handleClose = () => setShow(false);
+  // const handleShow = () => setShow(true);
+  
   return (
-    <div>
-      <p>Hero</p>
-    </div>
-  )
-};
+    <>
+      <Modal show={show} onHide={handleClose} onClick={() => handleClose()}>
+        <Modal.Header closeButton>
+          <Modal.Title>{hero.name}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{hero.role}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => handleClose()}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
 
 export default Hero;
-
-  // .then(() => {
-  //   charList.forEach(char => {
-  //       fetch(`https://overfast-api.tekrop.fr/heroes/${char}`)
-  //       .then(res => res.json())
-  //       .then(res => setCharData([...charData, res]))
-  //   })
-  // })
