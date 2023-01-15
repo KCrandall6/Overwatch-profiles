@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CharacterCard from './CharacterCard';
+import CharacterCard from './Hero';
 
 const Characters = () => {
 
