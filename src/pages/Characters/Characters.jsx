@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Dropdown} from 'react-bootstrap';
-import CharacterCard from './Hero';
+import Hero from './Hero';
 
 const Characters = () => {
 
@@ -68,7 +68,7 @@ const filterBy = (type) => {
       {charList.map((hero) => {
         return (
           <div key={hero.name} >
-            <CharacterCard hero={hero} />
+            <Hero hero={hero} />
           </div>
         )
       })}
