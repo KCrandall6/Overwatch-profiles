@@ -10,9 +10,10 @@ import teamlogo from '../../figures/overwatchteam.png';
 const Home = () => {
 
   const [userList, setUserList] = useState({});
+
   
   useEffect(() => {
-    const users = ['TeKrop-2217', 'MASTERCHEEKS-11366', 'banana-12938'];
+    const users = ['TeKrop-2217', 'roll-11736', 'banana-12938', 'Toyota-21458', 'Titan-13106'];
     const requests = users.map((user) => 
         fetch(`https://overfast-api.tekrop.fr/players/${user}/stats/summary`)
         .then((res) => res.json())
@@ -33,7 +34,7 @@ const Home = () => {
       <h3><em>Stay on Top and Track</em></h3>
       <h3><em>Your Game</em></h3>
       <div className="divider"></div>
-      <div className='d-flex flex-row flex-wrap'>
+      <div className="to-flex-wrap">
         {Object.entries(userList).map(([user, data]) => {
           return (
             <div key={data.general.games_played} >

@@ -41,7 +41,7 @@ const PlayerModal = ({user, show, handleShow, name, data}) => {
         <Modal.Body className="text-center mb-0">
           <p className="titles">General Stats</p>
           <p className="labels">Total Games Played: </p>
-          <p className="data-nums">{data.general.games_played}</p>
+          <p >{data.general.games_played}</p>
           <p className="labels">Win Rate: </p>
           <p >{data.general.winrate}</p>
           <p className="labels">Kill/Death Rate: </p>
@@ -52,26 +52,26 @@ const PlayerModal = ({user, show, handleShow, name, data}) => {
           <Container>
             <Row>
               <Col>
-                <p className="head">Totals</p>
+                <p className="head1">Totals</p>
                 <p className="labels">Kills: </p>
-                <p className="data-nums">{data.general.total.eliminations}</p>
+                <p>{data.general.total.eliminations}</p>
                 <p className="labels">Deaths: </p>
-                <p className="data-nums">{data.general.total.deaths}</p>
+                <p>{data.general.total.deaths}</p>
                 <p className="labels">Damage: </p>
-                <p className="data-nums">{data.general.total.damage}</p>
+                <p>{data.general.total.damage}</p>
                 <p className="labels">Healed Health: </p>
-                <p className="data-nums">{data.general.total.healing}</p>
+                <p>{data.general.total.healing}</p>
               </Col>
               <Col>
-                <p className="head">Averages</p>
+                <p className="head1">Averages</p>
                 <p className="labels">Kills: </p>
-                <p className="data-nums">{data.general.average.eliminations}</p>
+                <p>{data.general.average.eliminations}</p>
                 <p className="labels">Deaths: </p>
-                <p className="data-nums">{data.general.average.deaths}</p>
+                <p>{data.general.average.deaths}</p>
                 <p className="labels">Damage: </p>
-                <p className="data-nums">{data.general.average.damage}</p>
+                <p>{data.general.average.damage}</p>
                 <p className="labels">Healed Health: </p>
-                <p className="data-nums">{data.general.average.healing}</p>
+                <p>{data.general.average.healing}</p>
               </Col>
             </Row>
           </Container>
@@ -83,7 +83,7 @@ const PlayerModal = ({user, show, handleShow, name, data}) => {
             const name = capitalizeFirstLetter(hero[0])
             return (
               <div key={hero[0]} className="text-start ps-3">
-                <p className="head">{name}</p>
+                <p className="head2">{name}</p>
                 <p className="data-nums"><b>Average Kills: </b>{hero[1].average.eliminations}</p>
                 <p className="data-nums"><b>Average Damage:</b> {hero[1].average.damage}</p>
                 <p className="data-nums"><b>Kill/Death Ratio:</b> {hero[1].kda}</p>
