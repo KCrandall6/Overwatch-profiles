@@ -49,5 +49,22 @@ h3 {
 }
 
 .user-cards {
-  width: 342px;
+  width: 375px;
+}
+
+.titles {
+  font-size: xx-large;
+  font-weight: 700;
+}
+
+.labels {
+  margin-bottom: 0;
+  font-size: large;
+  font-weight: 600;
+}
+
+.head {
+  font-size: x-large;
+  font-weight: 600;
+  text-decoration: underline;
 }
