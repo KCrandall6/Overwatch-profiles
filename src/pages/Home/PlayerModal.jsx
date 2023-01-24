@@ -49,7 +49,7 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
           <p className="labels">Total Games Played: </p>
           <p >{data.general.games_played}</p>
           <p className="labels">Win Rate: </p>
-          <p >{data.general.winrate}</p>
+          <p >{data.general.winrate}%</p>
           <p className="labels">Kill/Death Rate: </p>
           <p >{data.general.kda}</p>
           <div className="divider"></div>

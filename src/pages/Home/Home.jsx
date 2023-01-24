@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Image } from 'react-bootstrap';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
 import PlayerCard from './PlayerCard';
 
@@ -14,7 +14,7 @@ const Home = () => {
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    const users = ['TeKrop-2217', 'roll-11736', 'banana-12938', 'Toyota-21458', 'Titan-13106'];
+    const users = ['Moustache-11527', 'Zombie-2324', 'Banana-22526', 'Pencil-11535', 'Titan-13106', 'Fungus-21317'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
@@ -35,11 +35,9 @@ const Home = () => {
   const handleFavoriting = (user) => {
     if (fav === user) {
       setFav(null);
-      // remove the user from the cookie
       removeCookie('user');
     } else {
       setFav(user);
-      // set the user in the cookie
       setCookie('user', user);
     }
   };

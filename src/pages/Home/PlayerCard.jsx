@@ -15,8 +15,6 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
       return kda > max.kda ? {role, kda} : max;
     }, {role: null, kda: -Infinity}).role);
 
-
-
     fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
     .then((res) => res.json())
     .then((res) => setPicSrc(res))
@@ -52,7 +50,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
             </div>
           </div>
             <p><b>Total Games Played: </b>{data.general.games_played}</p>
-            <p><b>Win Rate: </b>{data.general.winrate}</p>
+            <p><b>Win Rate: </b>{data.general.winrate}%</p>
             <p><b>Kill/Death ratio: </b>{data.general.kda}</p>
             <p><b>Top Role (<em>by K/D</em>): </b>{topRole}</p>
         </Card.Body>
