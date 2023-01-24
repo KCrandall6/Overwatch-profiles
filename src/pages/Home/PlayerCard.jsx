@@ -3,11 +3,10 @@ import { Card, Button } from 'react-bootstrap';
 import PlayerModal from './PlayerModal';
 
 
-const PlayerCard = ({user, data}) => {
+const PlayerCard = ({user, data, isFav, onFav}) => {
 
   const [show, setShow] = useState(false);
   const [topRole, setTopRole] = useState('');
-  const [fav, setFav] = useState([]);
   const [picSrc, setPicSrc] = useState('');
   const name = user.slice(0, user.lastIndexOf('-'));
 
@@ -16,13 +15,7 @@ const PlayerCard = ({user, data}) => {
       return kda > max.kda ? {role, kda} : max;
     }, {role: null, kda: -Infinity}).role);
 
-    const faved = JSON.parse(localStorage.getItem('profile'));
-    if (faved) {
-      setFav(faved)
-    } else {
-      window.localStorage.setItem('profile', JSON.stringify([]))
-      setFav([])
-    }
+
 
     fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
     .then((res) => res.json())
@@ -33,26 +26,19 @@ const PlayerCard = ({user, data}) => {
     setShow(!show);
   };
 
-  const handleFav = (profile) => {
-    let updatedFav = [...fav];
-    if (fav.includes(profile)) {
-      updatedFav = fav.filter(p => p !== profile);
-    } else {
-      updatedFav.push(profile);
-    }
-    setFav(updatedFav);
-    localStorage.setItem('profile', JSON.stringify(updatedFav));
-  };
-
-  console.log('fav', fav)
-
   return (
     <div className="d-flex align-items-center justify-content-center text-start m-2">
       <Card className="user-cards">
-        <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data}/>
+        <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data} isFav={isFav} onFav={onFav}/>
         <Card.Header className="d-flex justify-content-between fs-1">
           {name}
-          <Button variant="outline-warning" className={fav.length === 1 && fav.includes(user) ? 'favorited' : ''} onClick={() => handleFav(user)}>&#9734;</Button>
+          <Button 
+            variant={isFav ? 'warning' : 'outline-warning'}
+            onClick={onFav}
+            style={{backgroundColor: isFav ? '#ffcd68' : '', color: isFav ? 'black' : ''}}
+            >
+              &#9734;
+            </Button>
         </Card.Header>
         <Card.Body>
           <div className="d-flex flex-row p-2">

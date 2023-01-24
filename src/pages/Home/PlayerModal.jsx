@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
 
 
-const PlayerModal = ({user, show, handleShow, name, data}) => {
+const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
 
   const [avaSrc, setAvaSrc] = useState('');
   const [topHeroes, setTopHeroes] = useState([])
@@ -25,8 +25,14 @@ const PlayerModal = ({user, show, handleShow, name, data}) => {
   return (
     <Modal show={show} onHide={handleShow}>
         <Modal.Header className="d-flex justify-content-between" closeButton>
-          <Modal.Title>{name}</Modal.Title>
-          <Button className="ms-2" variant="outline-warning">&#9734;</Button>
+          <Modal.Title className="me-2">{name}</Modal.Title>
+          <Button 
+            variant={isFav ? 'warning' : 'outline-warning'}
+            onClick={onFav}
+            style={{backgroundColor: isFav ? '#ffcd68' : '', color: isFav ? 'black' : ''}}
+            >
+            &#9734;
+          </Button>
         </Modal.Header>
         <Modal.Body className="d-flex flex-row">
           <img
