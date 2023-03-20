@@ -8,13 +8,15 @@ import teamlogo from '../../figures/overwatchteam.png';
 
 // const users = ['PhilMckavity-1588', 'Malais52-1661', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847', ]
 
+// const test users = ['Moustache-11527', 'Zombie-2324', 'Banana-22526', 'Pencil-11535', 'Titan-13106', 'Fungus-21317'];
+
 const Home = () => {
 
   const [userList, setUserList] = useState({});
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    const users = ['Moustache-11527', 'Zombie-2324', 'Banana-22526', 'Pencil-11535', 'Titan-13106', 'Fungus-21317'];
+    const users = ['PhilMckavity-1588', 'MasterCheeks-11371'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
