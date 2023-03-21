@@ -16,7 +16,7 @@ const Home = () => {
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    const users = ['PhilMckavity-1588', 'MasterCheeks-11371'];
+    const users = ['PhilMckavity-1588', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
