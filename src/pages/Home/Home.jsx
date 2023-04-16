@@ -17,6 +17,7 @@ const Home = () => {
   
   useEffect(() => {
     const users = ['PhilMckavity-1588', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847'];
+    // const users = ['PhilMckavity-1588', 'Koalii-11847'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
@@ -45,7 +46,9 @@ const Home = () => {
   };
 
   const setCookie = (name, value) => {
-    Cookies.set(name, value);
+    const expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + 90);
+    Cookies.set(name, value, { expires: expirationDate });
   };
   const removeCookie = (name) => {
     Cookies.remove(name);

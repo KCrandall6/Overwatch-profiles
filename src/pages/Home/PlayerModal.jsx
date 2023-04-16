@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
 
 
-const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
+const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav, topRole}) => {
 
   const [avaSrc, setAvaSrc] = useState('');
   const [topHeroes, setTopHeroes] = useState([])
@@ -52,6 +52,8 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
           <p >{data.general.winrate}%</p>
           <p className="labels">Kill/Death Rate: </p>
           <p >{data.general.kda}</p>
+          <p className="labels">Top Role (by time played): </p>
+          <p >{topRole}</p>
           <div className="divider"></div>
         </Modal.Body>
         <Modal.Body className="show-grid text-center">
