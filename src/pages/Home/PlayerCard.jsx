@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Container, Row, Col } from 'react-bootstrap';
+import { Card, Button, Container, Row, Col, Spinner } from 'react-bootstrap';
 import PlayerModal from './PlayerModal';
 import unrankedImg from '../../figures/unranked.png';
 
@@ -9,6 +9,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
   const [show, setShow] = useState(false);
   const [topRole, setTopRole] = useState('');
   const [compSum, setCompSum] = useState('');
+  const [loading, setLoading] = useState(true);
   const name = user.slice(0, user.lastIndexOf('-'));
   const roles = ['tank', 'damage', 'support'];
 
@@ -19,12 +20,19 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
 
     fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
     .then((res) => res.json())
-    .then((res) => setCompSum(res))
+    .then((res) => {
+      setCompSum(res);
+      setLoading(false);
+    })
   }, [user, data.roles]);
 
   const handleShow = () => {
     setShow(!show);
   };
+
+  if (loading) {
+    return <Spinner animation="border" />;
+  }
 
   return (
     <div className="d-flex align-items-center justify-content-center text-start m-2">
