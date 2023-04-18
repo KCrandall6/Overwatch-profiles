@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Container, Row, Col, Card} from 'react-bootstrap';
+import { Modal, Button, Container, Row, Col, Card, Spinner, Dropdown} from 'react-bootstrap';
 
 
 const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
@@ -7,27 +7,63 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
   const [avaSrc, setAvaSrc] = useState('');
   const [topHeroes, setTopHeroes] = useState([]);
   const [heroPics, setHeroPics] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const heroesArray = Object.entries(data.heroes);
-    heroesArray.sort((a, b) => b[1].time_played - a[1].time_played);
-    setTopHeroes(heroesArray.slice(0, 15));
+    if (show) {
+      const fetchModalData = async () => {
+        const heroesArray = Object.entries(data.heroes);
+        heroesArray.sort((a, b) => b[1].time_played - a[1].time_played);
+        setTopHeroes(heroesArray.slice(0, 20));
 
-    fetch('https://overfast-api.tekrop.fr/heroes')
-    .then((res) => res.json())
-    .then((res) => setHeroPics(res));
+        const res = await fetch('https://overfast-api.tekrop.fr/heroes');
+        const heroPicsData = await res.json();
+        setHeroPics(heroPicsData);
 
-    fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
-    .then((res) => res.json())
-    .then((res) => setAvaSrc(res))
-  }, [data, user]);
+        const response = await fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`);
+        const playerData = await response.json();
+        setAvaSrc(playerData);
+        setLoading(false);
+      };
+      fetchModalData();
+    }
+  }, [data, user, show]);
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  console.log('data', heroPics)
+  const sortFunctions = {
+    name: (a, b) => a[0].localeCompare(b[0]),
+    kda: (a, b) => b[1].kda - a[1].kda,
+    damage: (a, b) => b[1].average.damage - a[1].average.damage,
+    winrate: (a, b) => b[1].winrate - a[1].winrate,
+    timeplayed: (a, b) => b[1].time_played - a[1].time_played,
+  };
+  
+  const sortBy = (type) => {
+    const sortFunction = sortFunctions[type];
+    if (sortFunction) {
+      const sortedHeroes = [...topHeroes].sort(sortFunction);
+      setTopHeroes(sortedHeroes);
+    }
+  };
+  
+  const filterBy = (type) => {
+      const filteredHeroes = topHeroes.filter((hero) => {
+        return heroPics.filter((pic) => {
+          return pic.key === hero[0];
+        }).some((pic) => {
+          return pic.role === type;
+        });
+      });
+      setTopHeroes(filteredHeroes);
+  }
+  
 
+  if (show && loading) {
+    return <Spinner animation="border" />;
+  };
 
   return (
     <Modal show={show} onHide={handleShow}>
@@ -55,10 +91,37 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
           <p className="titles mb-0">Top Heroes</p>
           <p><em>-by averages-</em></p>
 
+          <div className="d-flex flex-row justify-content-center m-2">
+        <Dropdown className="me-3">
+          <Dropdown.Toggle style={{ color:"black", backgroundColor: "#F99B12", border: "none"}} id="dropdown-basic">
+            Sort by
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => sortBy('name')}>Name</Dropdown.Item>
+            <Dropdown.Item onClick={() => sortBy('kda')}>Kill/Death Ratio</Dropdown.Item>
+            <Dropdown.Item onClick={() => sortBy('damage')}>Damage</Dropdown.Item>
+            <Dropdown.Item onClick={() => sortBy('winrate')}>Win Rate</Dropdown.Item>
+            <Dropdown.Item onClick={() => sortBy('timeplayed')}>Time Played</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+
+        <Dropdown >
+          <Dropdown.Toggle style={{ color:"black", backgroundColor: "#F99B12", border: "none"}} id="dropdown-basic">
+            Filter by
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => filterBy('support')}>Support</Dropdown.Item>
+            <Dropdown.Item onClick={() => filterBy('damage')}>Damage</Dropdown.Item>
+            <Dropdown.Item onClick={() => filterBy('tank')}>Tank</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+
           <Container className='d-flex flex-column text-center mt-3'>
             {topHeroes.map((hero) => {
               const name = capitalizeFirstLetter(hero[0]);
-              const heroPic = heroPics.find(pic => pic.name === name);
+              const heroPic = heroPics.find(pic => pic.key === hero[0]);
+              const role = heroPic && heroPic.role ? capitalizeFirstLetter(heroPic.role) : 'undefined';
               return (
                 <React.Fragment key={hero[0]}>
                   <Card className="char-card mb-3 ms-0 me-0" variant="light">
@@ -76,6 +139,7 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
                       <div className='mb-2'>
                         <Row>
                         <p className="fs-2 mb-0"><b><u>{name}</u></b></p>
+                        <p className="mb-1"><em>{role}</em></p>
                           <Col>
                           <p className="data-nums"><b>Kills:</b></p>
                           <p className="data-nums"><b>Damage:</b></p>
