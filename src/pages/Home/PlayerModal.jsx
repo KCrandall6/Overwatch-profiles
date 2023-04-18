@@ -38,6 +38,7 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
     kda: (a, b) => b[1].kda - a[1].kda,
     damage: (a, b) => b[1].average.damage - a[1].average.damage,
     winrate: (a, b) => b[1].winrate - a[1].winrate,
+    eliminations: (a, b) => b[1].average.eliminations - a[1].average.eliminations,
     timeplayed: (a, b) => b[1].time_played - a[1].time_played,
   };
   
@@ -101,6 +102,7 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
             <Dropdown.Item onClick={() => sortBy('kda')}>Kill/Death Ratio</Dropdown.Item>
             <Dropdown.Item onClick={() => sortBy('damage')}>Damage</Dropdown.Item>
             <Dropdown.Item onClick={() => sortBy('winrate')}>Win Rate</Dropdown.Item>
+            <Dropdown.Item onClick={() => sortBy('eliminations')}>Kills</Dropdown.Item>
             <Dropdown.Item onClick={() => sortBy('timeplayed')}>Time Played</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
