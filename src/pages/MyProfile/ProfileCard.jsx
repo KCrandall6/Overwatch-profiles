@@ -72,6 +72,78 @@ const ProfileCard = ({fav}) => {
               </Col>
             </Row>
           </Container>
+                  {/* <Modal.Body className="text-center mb-0">
+          <p className="titles">General Stats</p>
+          <p className="head1">Ranked Role Queue</p>
+          <Container className='d-flex flex-column text-center mt-3'>
+              {roles.map((role) => {
+                return (
+                  <React.Fragment key={role}>
+                    <Row>
+                    <Col>
+                        <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
+                        <p><em>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</em></p>
+                      </Col>
+                      <Col>
+                          {compSum?.competitive?.console?.[role]?.rank_icon ? (
+                        <img
+                          alt='rank'
+                          src={compSum.competitive.console[role].rank_icon}
+                          height='50'
+                        />
+                      ) : (
+                        <img
+                          alt='unranked'
+                          src={unrankedImg}
+                          height='50'
+                        />
+                      )}
+                      </Col>
+                    </Row>
+                  </React.Fragment>
+                )
+              })}
+          </Container>
+          <br></br> */}
+          {/* <p className="labels">Total Games Played: </p>
+          <p >{data.general.games_played}</p> */}
+          {/* <p className="labels">Win Rate: </p>
+          <p >{data.general.winrate}%</p>
+          <p className="labels">Lifetime Kill/Death Rate: </p>
+          <p >{data.general.kda}</p>
+          <p className="labels">Favorite Role (by time played): </p>
+          <p ><em>{topRole.charAt(0).toUpperCase() + topRole.slice(1)}</em></p>
+          <div className="divider"></div>
+        </Modal.Body>
+        <Modal.Body className="show-grid text-center">
+          <Container>
+            <Row>
+              <Col>
+                <p className="head1">Totals</p>
+                <p className="labels">Kills: </p>
+                <p>{data.general.total.eliminations}</p>
+                <p className="labels">Deaths: </p>
+                <p>{data.general.total.deaths}</p>
+                <p className="labels">Damage: </p>
+                <p>{data.general.total.damage}</p>
+                <p className="labels">Healed Health: </p>
+                <p>{data.general.total.healing}</p>
+              </Col>
+              <Col>
+                <p className="head1">Averages</p>
+                <p className="labels">Kills: </p>
+                <p>{data.general.average.eliminations}</p>
+                <p className="labels">Deaths: </p>
+                <p>{data.general.average.deaths}</p>
+                <p className="labels">Damage: </p>
+                <p>{data.general.average.damage}</p>
+                <p className="labels">Healed Health: </p>
+                <p>{data.general.average.healing}</p>
+              </Col>
+            </Row>
+          </Container>
+          <div className="divider"></div>
+        </Modal.Body> */}
           <div className="divider"></div>
       </div>
     )

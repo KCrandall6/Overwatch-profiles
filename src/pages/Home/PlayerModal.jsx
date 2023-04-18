@@ -1,16 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Container, Row, Col } from 'react-bootstrap';
+import { Modal, Button, Container, Row, Col, Card} from 'react-bootstrap';
 
 
-const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav, topRole}) => {
+const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
 
   const [avaSrc, setAvaSrc] = useState('');
-  const [topHeroes, setTopHeroes] = useState([])
+  const [topHeroes, setTopHeroes] = useState([]);
+  const [heroPics, setHeroPics] = useState([]);
 
   useEffect(() => {
     const heroesArray = Object.entries(data.heroes);
     heroesArray.sort((a, b) => b[1].time_played - a[1].time_played);
-    setTopHeroes(heroesArray.slice(0, 5));
+    setTopHeroes(heroesArray.slice(0, 15));
+
+    fetch('https://overfast-api.tekrop.fr/heroes')
+    .then((res) => res.json())
+    .then((res) => setHeroPics(res));
 
     fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
     .then((res) => res.json())
@@ -20,6 +25,8 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav, topRole}
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
+
+  console.log('data', heroPics)
 
 
   return (
@@ -44,61 +51,51 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav, topRole}
             <p className="fs-1 ps-3 text-break m-auto text-center"><b>{name}</b></p>
           </div>
         </Modal.Body>
-        <Modal.Body className="text-center mb-0">
-          <p className="titles">General Stats</p>
-          <p className="labels">Total Games Played: </p>
-          <p >{data.general.games_played}</p>
-          <p className="labels">Win Rate: </p>
-          <p >{data.general.winrate}%</p>
-          <p className="labels">Kill/Death Rate: </p>
-          <p >{data.general.kda}</p>
-          <p className="labels">Top Role (by time played): </p>
-          <p >{topRole}</p>
-          <div className="divider"></div>
-        </Modal.Body>
-        <Modal.Body className="show-grid text-center">
-          <Container>
-            <Row>
-              <Col>
-                <p className="head1">Totals</p>
-                <p className="labels">Kills: </p>
-                <p>{data.general.total.eliminations}</p>
-                <p className="labels">Deaths: </p>
-                <p>{data.general.total.deaths}</p>
-                <p className="labels">Damage: </p>
-                <p>{data.general.total.damage}</p>
-                <p className="labels">Healed Health: </p>
-                <p>{data.general.total.healing}</p>
-              </Col>
-              <Col>
-                <p className="head1">Averages</p>
-                <p className="labels">Kills: </p>
-                <p>{data.general.average.eliminations}</p>
-                <p className="labels">Deaths: </p>
-                <p>{data.general.average.deaths}</p>
-                <p className="labels">Damage: </p>
-                <p>{data.general.average.damage}</p>
-                <p className="labels">Healed Health: </p>
-                <p>{data.general.average.healing}</p>
-              </Col>
-            </Row>
+        <Modal.Body className="text-center mb-0 p-0">
+          <p className="titles mb-0">Top Heroes</p>
+          <p><em>-by averages-</em></p>
+
+          <Container className='d-flex flex-column text-center mt-3'>
+            {topHeroes.map((hero) => {
+              const name = capitalizeFirstLetter(hero[0]);
+              const heroPic = heroPics.find(pic => pic.name === name);
+              return (
+                <React.Fragment key={hero[0]}>
+                  <Card className="char-card mb-3 ms-0 me-0" variant="light">
+                    <div className='d-flex flex-row align-items-center ms-3'>
+                      <div>
+                      {heroPic && (
+                        <img
+                          alt='profile'
+                          src={heroPic.portrait}
+                          height='100'
+                          className='m-1'
+                        />
+                      )}
+                      </div>
+                      <div className='mb-2'>
+                        <Row>
+                        <p className="fs-2 mb-0"><b><u>{name}</u></b></p>
+                          <Col>
+                          <p className="data-nums"><b>Kills:</b></p>
+                          <p className="data-nums"><b>Damage:</b></p>
+                          <p className="data-nums"><b>K/D Ratio:</b></p>
+                          <p className="data-nums"><b>Win Rate:</b></p>
+                          </Col>
+                          <Col>
+                          <p className="data-nums">{hero[1].average.eliminations}</p>
+                          <p className="data-nums">{hero[1].average.damage}</p>
+                          <p className="data-nums">{hero[1].kda}</p>
+                          <p className="data-nums">{hero[1].winrate}%</p>
+                          </Col>
+                        </Row>
+                      </div>
+                    </div>
+                  </Card>
+                </React.Fragment>
+              )
+            })}
           </Container>
-          <div className="divider"></div>
-        </Modal.Body>
-        <Modal.Body className="text-center mb-0">
-          <p className="titles">Top Heroes</p>
-          {topHeroes.map((hero) => {
-            const name = capitalizeFirstLetter(hero[0])
-            return (
-              <div key={hero[0]} className="text-start ps-3">
-                <p className="head2">{name}</p>
-                <p className="data-nums"><b>Average Kills: </b>{hero[1].average.eliminations}</p>
-                <p className="data-nums"><b>Average Damage:</b> {hero[1].average.damage}</p>
-                <p className="data-nums"><b>Kill/Death Ratio:</b> {hero[1].kda}</p>
-                <p className="data-nums"><b>Win Rate:</b> {hero[1].winrate}</p>
-              </div>
-            )
-          })}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleShow}>

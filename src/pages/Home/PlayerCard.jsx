@@ -32,12 +32,12 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
 
   if (loading) {
     return <Spinner animation="border" />;
-  }
+  };
 
   return (
     <div className="d-flex align-items-center justify-content-center text-start m-2">
       <Card className="user-cards">
-        <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data} isFav={isFav} onFav={onFav} topRole={topRole}/>
+        <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data} isFav={isFav} onFav={onFav} topRole={topRole} compSum={compSum} roles={roles} unrankedImg={unrankedImg}/>
         <Card.Header className="d-flex justify-content-between fs-1">
           {name}
           <Button 
@@ -66,8 +66,8 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                   <React.Fragment key={role}>
                     <Row>
                     <Col>
-                        <p className='fs-2'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
-                        <p>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</p>
+                        <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
+                        <p><em>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</em></p>
                       </Col>
                       <Col>
                           {compSum?.competitive?.console?.[role]?.rank_icon ? (
