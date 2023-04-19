@@ -57,6 +57,9 @@ function NavBar() {
             <NavLink href="/characters">Characters</NavLink>
           </NavItem>
           <NavItem>
+            <NavLink href="/patchNotes">Patch Notes & News</NavLink>
+          </NavItem>
+          <NavItem>
             <NavLink href="/myprofile">My Profile</NavLink>
           </NavItem>
         </Nav>
