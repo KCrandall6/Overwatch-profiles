@@ -16,8 +16,7 @@ const Home = () => {
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    const users = ['PhilMckavity-1588', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847'];
-    // const users = ['PhilMckavity-1588', 'Koalii-11847'];
+    const users = ['PhilMckavity-1588', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'Koalii-11847', 'Malais52-1661'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
@@ -27,7 +26,7 @@ const Home = () => {
         fetch(`https://overfast-api.tekrop.fr/players/${user}/stats/summary`)
         .then((res) => res.json())
         .then((data) => {
-            setUserList((prevState) => ({...prevState, [user]: data}));
+            setUserList((prevState) => ({...prevState, [user]: data}))
         })
     );
     Promise.all(requests);
