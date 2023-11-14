@@ -6,9 +6,11 @@ import PlayerCard from './PlayerCard';
 
 import teamlogo from '../../figures/overwatchteam.png';
 
+// List of mine and my friend's accounts for tracking when profiles are available (waiting on Blizzard to update)
 // const users = ['PhilMckavity-1588', 'Malais52-1661', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847', 'XAYAW-1551'];
 
-// const test users = ['Moustache-11527', 'Zombie-2324', 'Banana-22526', 'Pencil-11535', 'Titan-13106', 'Fungus-21317'];
+// List of streamers/professional OW2 players
+const users = ['mL7-21877', 'emongg-11183', 'Fitzyhere-1294', 'Masaa-1182', 'Eskay-11565', 'Mace2theFace-21713'];
 
 const Home = () => {
 
@@ -16,7 +18,6 @@ const Home = () => {
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    const users = ['Moustache-11527', 'Zombie-2324', 'Banana-22526', 'Pencil-11535', 'Titan-13106', 'Fungus-21317'];
     setCookie('profiles', users);
     const favCookie = getCookie('user');
     if (favCookie) {
@@ -65,7 +66,7 @@ const Home = () => {
         width='100%'
       />
       <h3><em>Stay on Top and Track</em></h3>
-      <h3><em>Your Game</em></h3>
+      <h3><em>Your Favorite Players</em></h3>
       <div className="divider"></div>
       <div className="to-flex-wrap">
         {entries.map(([user, data]) => {

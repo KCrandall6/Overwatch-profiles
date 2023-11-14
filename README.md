@@ -1,73 +1,29 @@
-# Overwatch-profiles
-An app to track and see Overwatch player profiles
 
-# Getting Started with Create React App
+![Overwatch PR logo](/Overwatch-profiles//src/figures/OverwatchPR.png)
+![Overwatch team](/Overwatch-profiles/src/figures/overwatchteam.png)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<h1 align="center">Overwatch PR</h1>
 
-## Available Scripts
+Welcome to Overwatch PR, a mobile-centric web app built to track your favorite online Overwatch 2 profiles, learn more about the game's characters and their stories, as well as stay up to date on the latest OW2 news. You can access the deployed site [here](https://overwatchpr.netlify.app/).
 
-In the project directory, you can run:
+## How it works
+Overwatch PR is built using [create-react-app](https://create-react-app.dev/) on the frontend and deployed via [Netlify](https://www.netlify.com/). The frontend app relies on the [OverFast API](https://overfast-api.tekrop.fr/) to receive character and player data and components are customized [react-bootstrap](https://react-bootstrap.netlify.app/) components.
 
-### `npm start`
+### Install
+Installation and start follows normal [create-react-app](https://create-react-app.dev/) conventions which are as follows:
+1. ``npm install ``
+2. ``npm start ``
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Usage and Features
+The Overwatch PR app by default shows a handful of different professional streamers and overwatch profiles along with their stats. The profiles that are loaded in can be changed via the code in the `users` array via the Home.jsx component.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The profiles include a `favorite` button that saves the specific profile via a cookie using the [js-cookie](https://github.com/js-cookie/js-cookie) library. Further player details can be accessed on the My Profile page.
 
-### `npm test`
+Patch notes and Overwatch news can be accessed via links that link to the respective Blizzard links.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Limitations
+* It is important to note that player profiles need to be set to Open to be accessed through the API. The name needed for the API is the Blizzard name followed by a dash and four digit code.
+* Currently data and player profiles that play exclusively on console are not accessible via Blizzard. I assume the data associated with these profiles will roll out soon. To check a profile, see [here](https://overwatch.blizzard.com/en-us/search/).
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Contributing
+I'd love for you to test this library out and submit any issues you encounter. also feel free to fork your own repo and submit pull requests!

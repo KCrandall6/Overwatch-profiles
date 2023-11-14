@@ -65,7 +65,8 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                 return (
                   <React.Fragment key={role}>
                     <Row>
-                    <Col>
+                    {/* This is for console players */}
+                    {/* <Col>
                         <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
                         <p><em>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</em></p>
                       </Col>
@@ -74,6 +75,26 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                         <img
                           alt='rank'
                           src={compSum.competitive.console[role].rank_icon}
+                          height='70'
+                        />
+                      ) : (
+                        <img
+                          alt='unranked'
+                          src={unrankedImg}
+                          height='70'
+                        />
+                      )}
+                      </Col> */}
+                      {/* This is for pc players */}
+                      <Col>
+                        <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
+                        <p><em>{compSum?.competitive?.pc?.[role]?.division ? `${compSum.competitive.pc[role].division} ${compSum.competitive.pc[role].tier}` : "unranked"}</em></p>
+                      </Col>
+                      <Col>
+                          {compSum?.competitive?.pc?.[role]?.rank_icon ? (
+                        <img
+                          alt='rank'
+                          src={compSum.competitive.pc[role].rank_icon}
                           height='70'
                         />
                       ) : (
