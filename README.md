@@ -1,6 +1,6 @@
 
-![Overwatch PR logo](/Overwatch-profiles//src/figures/OverwatchPR.png)
-![Overwatch team](/Overwatch-profiles/src/figures/overwatchteam.png)
+![Overwatch PR logo](https://github.com/KCrandall6/Overwatch-profiles/blob/main/src/figures/OverwatchPR.png)
+![Overwatch team](https://github.com/KCrandall6/Overwatch-profiles/blob/main/src/figures/overwatchteam.png)
 
 <h1 align="center">Overwatch PR</h1>
 
@@ -11,13 +11,13 @@ Overwatch PR is built using [create-react-app](https://create-react-app.dev/) on
 
 ### Install
 Installation and start follows normal [create-react-app](https://create-react-app.dev/) conventions which are as follows:
-1. ``npm install ``
-2. ``npm start ``
+1. ``npm install``
+2. ``npm start``
 
 ### Usage and Features
-The Overwatch PR app by default shows a handful of different professional streamers and overwatch profiles along with their stats. The profiles that are loaded in can be changed via the code in the `users` array via the Home.jsx component.
+The Overwatch PR app by default shows a handful of different professional streamers and overwatch profiles along with their stats. The profiles that are loaded in can be changed via the code in the users array via the Home.jsx component.
 
-The profiles include a `favorite` button that saves the specific profile via a cookie using the [js-cookie](https://github.com/js-cookie/js-cookie) library. Further player details can be accessed on the My Profile page.
+The profiles include a favorite button that saves the specific profile via a cookie using the [js-cookie](https://github.com/js-cookie/js-cookie) library. Further player details can be accessed on the My Profile page.
 
 Patch notes and Overwatch news can be accessed via links that link to the respective Blizzard links.
 
