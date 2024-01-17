@@ -39,7 +39,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
       <Card className="user-cards">
         <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data} isFav={isFav} onFav={onFav} topRole={topRole} compSum={compSum} roles={roles} unrankedImg={unrankedImg}/>
         <Card.Header className="d-flex justify-content-between fs-1">
-          {name}
+          {name} 
           <Button 
             variant={isFav ? 'warning' : 'outline-warning'}
             onClick={onFav}
@@ -49,14 +49,19 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
             </Button>
         </Card.Header>
         <Card.Body>
-          <div className="d-flex flex-row p-2">
+          <div className="d-flex flex-row p-2 justify-content-start ">
             <img
             alt='hero avatar'
             src={compSum.avatar}
             height='100'
             />
-            <div className="d-flex flex-row align-items-center justify-content-center">
-              <p className="fs-1 ps-3 text-break m-auto">{name}</p>
+            <div className="d-flex m-auto">
+              <p className="fs-1 text-break mb-0 ms-2">{name}</p>
+              <img
+                alt='endorsement'
+                src={compSum.endorsement.frame}
+                height='40'
+                />
             </div>
           </div>
 
@@ -66,7 +71,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                   <React.Fragment key={role}>
                     <Row>
                     {/* This is for console players */}
-                    {/* <Col>
+                    <Col>
                         <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
                         <p><em>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</em></p>
                       </Col>
@@ -84,9 +89,9 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                           height='70'
                         />
                       )}
-                      </Col> */}
+                      </Col>
                       {/* This is for pc players */}
-                      <Col>
+                      {/* <Col>
                         <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
                         <p><em>{compSum?.competitive?.pc?.[role]?.division ? `${compSum.competitive.pc[role].division} ${compSum.competitive.pc[role].tier}` : "unranked"}</em></p>
                       </Col>
@@ -104,7 +109,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
                           height='70'
                         />
                       )}
-                      </Col>
+                      </Col> */}
                     </Row>
                   </React.Fragment>
                 )

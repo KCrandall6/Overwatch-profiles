@@ -61,6 +61,11 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
       setTopHeroes(filteredHeroes);
   }
   
+  const formatTimePlayed = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+  };
 
   if (show && loading) {
     return <Spinner animation="border" />;
@@ -137,6 +142,8 @@ const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
                           className='m-1'
                         />
                       )}
+                      <p className='mb-0 custom-font-size'>time played:</p>
+                      <p className='mb-0 fst-italic custom-font-size'> {formatTimePlayed(hero[1].time_played)}</p>
                       </div>
                       <div className='mb-2'>
                         <Row>

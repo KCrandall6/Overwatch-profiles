@@ -100,3 +100,7 @@ h3 {
   background-color: #ffcd68;
   color: black;
 }
+
+.custom-font-size {
+  font-size: 12px;
+}

@@ -8,9 +8,10 @@ import teamlogo from '../../figures/overwatchteam.png';
 
 // List of mine and my friend's accounts for tracking when profiles are available (waiting on Blizzard to update)
 // const users = ['PhilMckavity-1588', 'Malais52-1661', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847', 'XAYAW-1551'];
+const users = ['PhilMckavity-1588', 'IGUSYDUSY-1429', 'XAYAW-1551'];
 
 // List of streamers/professional OW2 players
-const users = ['mL7-21877', 'emongg-11183', 'Fitzyhere-1294', 'Masaa-1182', 'Eskay-11565', 'Mace2theFace-21713'];
+// const users = ['mL7-21877', 'emongg-11183', 'Fitzyhere-1294', 'Masaa-1182', 'Eskay-11565', 'Mace2theFace-21713'];
 
 const Home = () => {
 
@@ -18,19 +19,25 @@ const Home = () => {
   const [fav, setFav] = useState('');
   
   useEffect(() => {
-    setCookie('profiles', users);
-    const favCookie = getCookie('user');
-    if (favCookie) {
-      setFav(favCookie);
-    }
-    const requests = users.map((user) => 
-        fetch(`https://overfast-api.tekrop.fr/players/${user}/stats/summary`)
-        .then((res) => res.json())
-        .then((data) => {
-            setUserList((prevState) => ({...prevState, [user]: data}))
-        })
-    );
-    Promise.all(requests);
+    const fetchData = async () => {
+      setCookie('profiles', users);
+      const favCookie = getCookie('user');
+      if (favCookie) {
+        setFav(favCookie);
+      }
+  
+      for (const user of users) {
+        try {
+          const response = await fetch(`https://overfast-api.tekrop.fr/players/${user}/stats/summary`);
+          const data = await response.json();
+          setUserList((prevState) => ({ ...prevState, [user]: data }));
+        } catch (error) {
+          console.error(`Error fetching data for user ${user}:`, error);
+        }
+      }
+    };
+  
+    fetchData();
   }, []);
 
   const entries = useMemo(() => Object.entries(userList), [userList]);

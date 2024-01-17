@@ -23,6 +23,13 @@ const ProfileCard = ({fav}) => {
     .then(() => setLoading(false));
   }, [fav]);
 
+  const formatTimePlayed = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return `${hours}h ${minutes}m`;
+  };
+  console.log('te', profileInfo)
+
   if (!loading) {
     return (
       <div className='p-3'>
@@ -38,6 +45,8 @@ const ProfileCard = ({fav}) => {
         </div>
         <div className="text-center">
             <p className="titles">General Stats</p>
+            <p className="labels">Total Time Played: </p>
+            <p >{formatTimePlayed(profileInfo.general.time_played)}</p>
             <p className="labels">Total Games Played: </p>
             <p >{profileInfo.general.games_played}</p>
             <p className="labels">Win Rate: </p>
