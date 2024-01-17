@@ -7,6 +7,7 @@ import Home from './pages/Home/Home';
 import MyProfile from './pages/MyProfile/MyProfile';
 import Characters from './pages/Characters/Characters';
 import PatchNotes from './pages/PatchNotes/PatchNotes';
+import Share from './pages/Share/Share';
 import NavBar from './pages/NavBar';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <Route path='/characters' element={<Characters/>} />
         <Route path='/patchNotes' element={<PatchNotes/>} />
         <Route path='/myProfile' element={<MyProfile/>} />
+        <Route path= '/share' element={<Share/>}/>
       </Routes>
     </BrowserRouter>
   );

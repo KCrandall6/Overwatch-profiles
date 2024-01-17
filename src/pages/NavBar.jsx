@@ -62,6 +62,9 @@ function NavBar() {
           <NavItem>
             <NavLink href="/myprofile">My Profile</NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink href="/share">Share</NavLink>
+          </NavItem>
         </Nav>
       </div>
     </Navbar>
