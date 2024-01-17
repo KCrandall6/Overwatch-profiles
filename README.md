@@ -9,7 +9,7 @@ Welcome to Overwatch PR, a mobile-centric web app built to track your favorite o
 ## How it works
 Overwatch PR is built using [create-react-app](https://create-react-app.dev/) on the frontend and deployed via [Netlify](https://www.netlify.com/). The frontend app relies on the [OverFast API](https://overfast-api.tekrop.fr/) to receive character and player data and components are customized [react-bootstrap](https://react-bootstrap.netlify.app/) components.
 
-The app's UI is built to be mobile-centric, and can be downloaded to your phone's home screen. To download the app to your phone, follow these [instructions](https://overwatchpr.netlify.app/share)
+The app's UI is built to be mobile-centric, and can be downloaded to your phone's home screen. To download the app to your phone, follow these [instructions](https://overwatchpr.netlify.app/share).
 
 For the OverFast API to work, a user must already exist for the Overwatch game. The name needed for the API is the Blizzard name followed by a dash and numeric code (ex: mL7-21877). This digit code can be found in the URL when searching a profile on Blizzard's [profile search](https://overwatch.blizzard.com/en-us/search/) site.
 
