@@ -8,7 +8,7 @@ import teamlogo from '../../figures/overwatchteam.png';
 
 // List of mine and my friend's accounts for tracking when profiles are available (waiting on Blizzard to update)
 // const users = ['PhilMckavity-1588', 'Malais52-1661', 'MasterCheeks-11371', 'HerryBanana-1388', 'IGUSYDUSY-1429', 'GimmeUrMilk-11378', 'Koalii-11847', 'XAYAW-1551'];
-const users = ['PhilMckavity-1588', 'IGUSYDUSY-1429', 'XAYAW-1551'];
+const users = ['PhilMckavity-1588', 'IGUSYDUSY-1429', 'XAYAW-1551', 'HerryBanana-1388', 'Koalii-11847'];
 
 // List of streamers/professional OW2 players
 // const users = ['mL7-21877', 'emongg-11183', 'Fitzyhere-1294', 'Masaa-1182', 'Eskay-11565', 'Mace2theFace-21713'];
