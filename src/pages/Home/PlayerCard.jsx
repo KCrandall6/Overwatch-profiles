@@ -10,20 +10,32 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
   const [topRole, setTopRole] = useState('');
   const [compSum, setCompSum] = useState('');
   const [loading, setLoading] = useState(true);
+  const [summaryError, setSummaryError] = useState(false);
   const name = user.slice(0, user.lastIndexOf('-'));
   const roles = ['tank', 'damage', 'support'];
 
   useEffect(() => {
-    setTopRole(Object.entries(data.roles).reduce((max, [role, {kda}]) => {
+    setTopRole(Object.entries(data.roles || {}).reduce((max, [role, {kda}]) => {
       return kda > max.kda ? {role, kda} : max;
     }, {role: null, kda: -Infinity}).role);
 
+    setLoading(true);
+    setSummaryError(false);
     fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
-    .then((res) => res.json())
     .then((res) => {
+      if (!res.ok) throw new Error(`Summary request returned ${res.status}`);
+      return res.json();
+    })
+    .then((res) => {
+      if (!res?.avatar) throw new Error('Summary response did not include an avatar');
       setCompSum(res);
       setLoading(false);
     })
+    .catch((error) => {
+      console.error(`Error fetching summary for user ${user}:`, error);
+      setSummaryError(true);
+      setLoading(false);
+    });
   }, [user, data.roles]);
 
   const handleShow = () => {
@@ -33,6 +45,15 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
   if (loading) {
     return <Spinner animation="border" />;
   };
+
+  if (summaryError) {
+    return (
+      <Card className="user-cards m-2 text-start">
+        <Card.Header className="fs-1">{name}</Card.Header>
+        <Card.Body>Profile summary is currently unavailable.</Card.Body>
+      </Card>
+    );
+  }
 
   return (
     <div className="d-flex align-items-center justify-content-center text-start m-2">
@@ -59,7 +80,7 @@ const PlayerCard = ({user, data, isFav, onFav}) => {
               <p className="fs-1 text-break mb-0 ms-2">{name}</p>
               <img
                 alt='endorsement'
-                src={compSum.endorsement.frame}
+                src={compSum.endorsement?.frame}
                 height='40'
                 />
             </div>

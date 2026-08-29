@@ -25,6 +25,28 @@
   }
 }
 
+.team-logo {
+  width: 100%;
+  height: auto;
+}
+
+@media only screen and (min-width: 768px) {
+  .team-logo {
+    width: min(100%, 720px);
+    align-self: center;
+  }
+}
+
+.profile-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 8rem;
+}
+
+.profile-error {
+  width: min(400px, 100%);
+}
 
 .navbar {
   padding: 0 1rem;
