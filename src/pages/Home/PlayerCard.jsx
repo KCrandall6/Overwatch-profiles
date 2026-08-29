@@ -1,153 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Button, Container, Row, Col, Spinner } from 'react-bootstrap';
+import React, { useState } from 'react';
 import PlayerModal from './PlayerModal';
-import unrankedImg from '../../figures/unranked.png';
+import { capitalize, displayName, formatDuration, getTopHeroes, profileStatus } from '../../utils/playerStats';
 
+const ROLES = ['tank', 'damage', 'support'];
 
-const PlayerCard = ({user, data, isFav, onFav}) => {
-
+export default function PlayerCard({ player, state = { status: 'loading' }, scope, heroes, isFavorite, onFavorite, onRetry }) {
   const [show, setShow] = useState(false);
-  const [topRole, setTopRole] = useState('');
-  const [compSum, setCompSum] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [summaryError, setSummaryError] = useState(false);
-  const name = user.slice(0, user.lastIndexOf('-'));
-  const roles = ['tank', 'damage', 'support'];
+  const name = displayName(player);
+  const metadata = Object.fromEntries(heroes.map(hero => [hero.key, hero]));
 
-  useEffect(() => {
-    setTopRole(Object.entries(data.roles || {}).reduce((max, [role, {kda}]) => {
-      return kda > max.kda ? {role, kda} : max;
-    }, {role: null, kda: -Infinity}).role);
+  if (state.status === 'loading') return <article className="player-card skeleton-card" aria-label={`Loading ${name}`}><div className="skeleton hero-line"/><div className="identity"><div className="skeleton avatar"/><div className="skeleton text-line"/></div><div className="skeleton ranks"/><div className="skeleton heroes"/></article>;
 
-    setLoading(true);
-    setSummaryError(false);
-    fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`)
-    .then((res) => {
-      if (!res.ok) throw new Error(`Summary request returned ${res.status}`);
-      return res.json();
-    })
-    .then((res) => {
-      if (!res?.avatar) throw new Error('Summary response did not include an avatar');
-      setCompSum(res);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error(`Error fetching summary for user ${user}:`, error);
-      setSummaryError(true);
-      setLoading(false);
-    });
-  }, [user, data.roles]);
-
-  const handleShow = () => {
-    setShow(!show);
-  };
-
-  if (loading) {
-    return <Spinner animation="border" />;
-  };
-
-  if (summaryError) {
-    return (
-      <Card className="user-cards m-2 text-start">
-        <Card.Header className="fs-1">{name}</Card.Header>
-        <Card.Body>Profile summary is currently unavailable.</Card.Body>
-      </Card>
-    );
+  if (state.status === 'error') {
+    const unavailable = profileStatus(state.error);
+    return <article className="player-card unavailable-card"><header><div><span className="scope-badge">Tracked player</span><h2>{name}</h2></div><button className="favorite" onClick={onFavorite} aria-label={`${isFavorite ? 'Remove' : 'Add'} favorite`}>{isFavorite ? '★' : '☆'}</button></header><div className="unavailable-content"><span className="status-icon">!</span><h3>{unavailable.title}</h3><p>{unavailable.message}</p>{state.error?.retryAfter && <small>Retry after {state.error.retryAfter}.</small>}<button className="primary-button" onClick={onRetry}>Retry</button></div></article>;
   }
 
-  return (
-    <div className="d-flex align-items-center justify-content-center text-start m-2">
-      <Card className="user-cards">
-        <PlayerModal user={user} show={show} handleShow={handleShow} name={name} data={data} isFav={isFav} onFav={onFav} topRole={topRole} compSum={compSum} roles={roles} unrankedImg={unrankedImg}/>
-        <Card.Header className="d-flex justify-content-between fs-1">
-          {name} 
-          <Button 
-            variant={isFav ? 'warning' : 'outline-warning'}
-            onClick={onFav}
-            style={{backgroundColor: isFav ? '#ffcd68' : '', color: isFav ? 'black' : ''}}
-            >
-              &#9734;
-            </Button>
-        </Card.Header>
-        <Card.Body>
-          <div className="d-flex flex-row p-2 justify-content-start ">
-            <img
-            alt='hero avatar'
-            src={compSum.avatar}
-            height='100'
-            />
-            <div className="d-flex m-auto">
-              <p className="fs-1 text-break mb-0 ms-2">{name}</p>
-              <img
-                alt='endorsement'
-                src={compSum.endorsement?.frame}
-                height='40'
-                />
-            </div>
-          </div>
-
-          <Container className='d-flex flex-column text-center mt-3'>
-              {roles.map((role) => {
-                return (
-                  <React.Fragment key={role}>
-                    <Row>
-                    {/* This is for console players */}
-                    <Col>
-                        <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
-                        <p><em>{compSum?.competitive?.console?.[role]?.division ? `${compSum.competitive.console[role].division} ${compSum.competitive.console[role].tier}` : "unranked"}</em></p>
-                      </Col>
-                      <Col>
-                          {compSum?.competitive?.console?.[role]?.rank_icon ? (
-                        <img
-                          alt='rank'
-                          src={compSum.competitive.console[role].rank_icon}
-                          height='70'
-                        />
-                      ) : (
-                        <img
-                          alt='unranked'
-                          src={unrankedImg}
-                          height='70'
-                        />
-                      )}
-                      </Col>
-                      {/* This is for pc players */}
-                      {/* <Col>
-                        <p className='fs-2 mb-1'>{role.charAt(0).toUpperCase() + role.slice(1)}</p>
-                        <p><em>{compSum?.competitive?.pc?.[role]?.division ? `${compSum.competitive.pc[role].division} ${compSum.competitive.pc[role].tier}` : "unranked"}</em></p>
-                      </Col>
-                      <Col>
-                          {compSum?.competitive?.pc?.[role]?.rank_icon ? (
-                        <img
-                          alt='rank'
-                          src={compSum.competitive.pc[role].rank_icon}
-                          height='70'
-                        />
-                      ) : (
-                        <img
-                          alt='unranked'
-                          src={unrankedImg}
-                          height='70'
-                        />
-                      )}
-                      </Col> */}
-                    </Row>
-                  </React.Fragment>
-                )
-              })}
-          </Container>
-            {/* <p><b>Total Games Played: </b>{data.general.games_played}</p>
-            <p><b>Win Rate: </b>{data.general.winrate}%</p>
-            <p><b>Kill/Death ratio: </b>{data.general.kda}</p>
-            <p><b>Top Role (<em>by K/D</em>): </b>{topRole}</p> */}
-            
-        </Card.Body>
-        <Card.Footer>
-        <Button onClick={handleShow} variant="secondary">See More</Button>
-        </Card.Footer>
-      </Card>
-    </div>
-  )
-};
-
-export default PlayerCard;
+  const { summary, stats } = state;
+  const ranks = summary?.competitive?.[scope.platform] || {};
+  const topHeroes = getTopHeroes(stats?.heroes, 3);
+  const scopeLabel = `${scope.gamemode === 'quickplay' ? 'Quick Play' : 'Competitive'} · ${scope.platform === 'pc' ? 'PC' : 'Console'}`;
+  return <>
+    <article className="player-card">
+      <header><div><span className="scope-badge">{scopeLabel}</span><h2>{name}</h2></div><button className="favorite" onClick={onFavorite} aria-label={`${isFavorite ? 'Remove' : 'Add'} favorite`}>{isFavorite ? '★' : '☆'}</button></header>
+      <div className="identity"><img src={summary?.avatar} alt=""/><div><strong>{name}</strong><span>{summary?.title || 'Overwatch player'}</span></div>{summary?.endorsement?.frame && <img className="endorsement" src={summary.endorsement.frame} alt="Endorsement"/>}</div>
+      {scope.gamemode === 'competitive' && <div className="rank-grid">{ROLES.map(role => { const rank = ranks?.[role]; return <div key={role}><span>{capitalize(role)}</span>{rank?.rank_icon && <img src={rank.rank_icon} alt=""/>}<strong>{rank?.division ? `${capitalize(rank.division)} ${rank.tier}` : 'Unranked'}</strong></div>; })}</div>}
+      <section className="most-played"><div className="section-heading"><h3>Most Played Heroes</h3><small>{scopeLabel}</small></div>{topHeroes.length ? topHeroes.map(([key, hero]) => <div className="hero-row" key={key}><img src={metadata[key]?.portrait} alt=""/><span>{metadata[key]?.name || capitalize(key)}</span><strong>{formatDuration(hero.time_played)}</strong></div>) : <p className="empty-state">No hero statistics are available for this scope.</p>}</section>
+      <button className="primary-button full" onClick={() => setShow(true)}>View full profile</button>
+    </article>
+    <PlayerModal player={player} initialSummary={summary} initialStats={stats} initialScope={scope} heroes={heroes} show={show} onHide={() => setShow(false)} isFavorite={isFavorite} onFavorite={onFavorite}/>
+  </>;
+}

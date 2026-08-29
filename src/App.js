@@ -16,8 +16,11 @@ function App() {
     <NavBar/>
       <Routes>
         <Route path='/' element={<Home/>} />
+        <Route path='/heroes' element={<Characters/>} />
         <Route path='/characters' element={<Characters/>} />
+        <Route path='/patch-notes' element={<PatchNotes/>} />
         <Route path='/patchNotes' element={<PatchNotes/>} />
+        <Route path='/my-player' element={<MyProfile/>} />
         <Route path='/myProfile' element={<MyProfile/>} />
         <Route path= '/share' element={<Share/>}/>
       </Routes>

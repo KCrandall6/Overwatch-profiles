@@ -1,182 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { Modal, Button, Container, Row, Col, Card, Spinner, Dropdown} from 'react-bootstrap';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Modal } from 'react-bootstrap';
+import { getPlayerStats } from '../../api/overfast';
+import { capitalize, displayName, formatDuration, formatNumber, formatPercent, sortHeroStats } from '../../utils/playerStats';
 
+const ROLES = ['tank', 'damage', 'support'];
+const SORTS = { timeplayed: 'Time Played', name: 'Name', winrate: 'Win Rate', kda: 'KDA', damage: 'Avg. Damage', eliminations: 'Avg. Eliminations' };
 
-const PlayerModal = ({user, show, handleShow, name, data, isFav, onFav}) => {
+export default function PlayerModal({ player, initialSummary, initialStats, initialScope, heroes, show, onHide, isFavorite, onFavorite }) {
+  const [scope, setScope] = useState(initialScope);
+  const [stats, setStats] = useState(initialStats);
+  const [status, setStatus] = useState('ready');
+  const [role, setRole] = useState('all');
+  const [sort, setSort] = useState('timeplayed');
+  const metadata = useMemo(() => Object.fromEntries(heroes.map(hero => [hero.key, hero])), [heroes]);
 
-  const [avaSrc, setAvaSrc] = useState('');
-  const [topHeroes, setTopHeroes] = useState([]);
-  const [heroPics, setHeroPics] = useState([]);
-  const [loading, setLoading] = useState(true);
-
+  useEffect(() => { setScope(initialScope); setStats(initialStats); }, [initialScope, initialStats]);
   useEffect(() => {
-    if (show) {
-      const fetchModalData = async () => {
-        const heroesArray = Object.entries(data.heroes);
-        heroesArray.sort((a, b) => b[1].time_played - a[1].time_played);
-        setTopHeroes(heroesArray.slice(0, 20));
+    if (!show || (scope.platform === initialScope.platform && scope.gamemode === initialScope.gamemode)) return;
+    const controller = new AbortController();
+    setStatus('loading');
+    getPlayerStats(player, { ...scope, signal: controller.signal }).then(data => { setStats(data); setStatus('ready'); }).catch(error => { if (error.name !== 'AbortError') setStatus('error'); });
+    return () => controller.abort();
+  }, [show, player, scope, initialScope]);
 
-        const res = await fetch('https://overfast-api.tekrop.fr/heroes');
-        const heroPicsData = await res.json();
-        setHeroPics(heroPicsData);
+  const heroRows = useMemo(() => sortHeroStats(Object.entries(stats?.heroes || {}).filter(([key]) => role === 'all' || metadata[key]?.role === role), sort), [stats, metadata, role, sort]);
+  const general = stats?.general || {};
+  const ranks = initialSummary?.competitive?.[scope.platform] || {};
+  const label = `${scope.gamemode === 'quickplay' ? 'Quick Play' : 'Competitive'} · ${scope.platform === 'pc' ? 'PC' : 'Console'}`;
 
-        const response = await fetch(`https://overfast-api.tekrop.fr/players/${user}/summary`);
-        const playerData = await response.json();
-        setAvaSrc(playerData);
-        setLoading(false);
-      };
-      fetchModalData();
-    }
-  }, [data, user, show]);
-
-  const capitalizeFirstLetter = (string) => {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  const sortFunctions = {
-    name: (a, b) => a[0].localeCompare(b[0]),
-    kda: (a, b) => b[1].kda - a[1].kda,
-    damage: (a, b) => b[1].average.damage - a[1].average.damage,
-    winrate: (a, b) => b[1].winrate - a[1].winrate,
-    eliminations: (a, b) => b[1].average.eliminations - a[1].average.eliminations,
-    timeplayed: (a, b) => b[1].time_played - a[1].time_played,
-  };
-  
-  const sortBy = (type) => {
-    const sortFunction = sortFunctions[type];
-    if (sortFunction) {
-      const sortedHeroes = [...topHeroes].sort(sortFunction);
-      setTopHeroes(sortedHeroes);
-    }
-  };
-  
-  const filterBy = (type) => {
-      const filteredHeroes = topHeroes.filter((hero) => {
-        return heroPics.filter((pic) => {
-          return pic.key === hero[0];
-        }).some((pic) => {
-          return pic.role === type;
-        });
-      });
-      setTopHeroes(filteredHeroes);
-  }
-  
-  const formatTimePlayed = (seconds) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}h ${minutes}m`;
-  };
-
-  if (show && loading) {
-    return <Spinner animation="border" />;
-  };
-
-  return (
-    <Modal show={show} onHide={handleShow}>
-        <Modal.Header className="d-flex justify-content-between" closeButton>
-          <Modal.Title className="me-2">{name}</Modal.Title>
-          <Button 
-            variant={isFav ? 'warning' : 'outline-warning'}
-            onClick={onFav}
-            style={{backgroundColor: isFav ? '#ffcd68' : '', color: isFav ? 'black' : ''}}
-            >
-            &#9734;
-          </Button>
-        </Modal.Header>
-        <Modal.Body className="d-flex flex-row">
-          <img
-          alt="profile"
-          src={avaSrc.avatar}
-          height="100"
-          />
-          <div className="d-flex flex-column overflow-auto text-center">
-            <p className="fs-1 ps-3 text-break m-auto text-center"><b>{name}</b></p>
-          </div>
-        </Modal.Body>
-        <Modal.Body className="text-center mb-0 p-0">
-          <p className="titles mb-0">Top Heroes</p>
-          <p><em>-by averages-</em></p>
-
-          <div className="d-flex flex-row justify-content-center m-2">
-        <Dropdown className="me-3">
-          <Dropdown.Toggle style={{ color:"black", backgroundColor: "#F99B12", border: "none"}} id="dropdown-basic">
-            Sort by
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => sortBy('name')}>Name</Dropdown.Item>
-            <Dropdown.Item onClick={() => sortBy('kda')}>Kill/Death Ratio</Dropdown.Item>
-            <Dropdown.Item onClick={() => sortBy('damage')}>Damage</Dropdown.Item>
-            <Dropdown.Item onClick={() => sortBy('winrate')}>Win Rate</Dropdown.Item>
-            <Dropdown.Item onClick={() => sortBy('eliminations')}>Kills</Dropdown.Item>
-            <Dropdown.Item onClick={() => sortBy('timeplayed')}>Time Played</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-
-        <Dropdown >
-          <Dropdown.Toggle style={{ color:"black", backgroundColor: "#F99B12", border: "none"}} id="dropdown-basic">
-            Filter by
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={() => filterBy('support')}>Support</Dropdown.Item>
-            <Dropdown.Item onClick={() => filterBy('damage')}>Damage</Dropdown.Item>
-            <Dropdown.Item onClick={() => filterBy('tank')}>Tank</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
-
-          <Container className='d-flex flex-column text-center mt-3'>
-            {topHeroes.map((hero) => {
-              const name = capitalizeFirstLetter(hero[0]);
-              const heroPic = heroPics.find(pic => pic.key === hero[0]);
-              const role = heroPic && heroPic.role ? capitalizeFirstLetter(heroPic.role) : 'undefined';
-              return (
-                <React.Fragment key={hero[0]}>
-                  <Card className="char-card mb-3 ms-0 me-0" variant="light">
-                    <div className='d-flex flex-row align-items-center ms-3'>
-                      <div>
-                      {heroPic && (
-                        <img
-                          alt='profile'
-                          src={heroPic.portrait}
-                          height='100'
-                          className='m-1'
-                        />
-                      )}
-                      <p className='mb-0 custom-font-size'>time played:</p>
-                      <p className='mb-0 fst-italic custom-font-size'> {formatTimePlayed(hero[1].time_played)}</p>
-                      </div>
-                      <div className='mb-2'>
-                        <Row>
-                        <p className="fs-2 mb-0"><b><u>{name}</u></b></p>
-                        <p className="mb-1"><em>{role}</em></p>
-                          <Col>
-                          <p className="data-nums"><b>Kills:</b></p>
-                          <p className="data-nums"><b>Damage:</b></p>
-                          <p className="data-nums"><b>K/D Ratio:</b></p>
-                          <p className="data-nums"><b>Win Rate:</b></p>
-                          </Col>
-                          <Col>
-                          <p className="data-nums">{hero[1].average.eliminations}</p>
-                          <p className="data-nums">{hero[1].average.damage}</p>
-                          <p className="data-nums">{hero[1].kda}</p>
-                          <p className="data-nums">{hero[1].winrate}%</p>
-                          </Col>
-                        </Row>
-                      </div>
-                    </div>
-                  </Card>
-                </React.Fragment>
-              )
-            })}
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleShow}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-  )
-};
-
-export default PlayerModal;
+  return <Modal show={show} onHide={onHide} size="lg" centered scrollable dialogClassName="player-modal">
+    <Modal.Header closeButton><div className="modal-identity"><img src={initialSummary?.avatar} alt=""/><div><span className="scope-badge">PLAYER PROFILE</span><Modal.Title>{displayName(player)}</Modal.Title></div></div><button className="favorite" onClick={onFavorite} aria-label="Toggle favorite">{isFavorite ? '★' : '☆'}</button></Modal.Header>
+    <Modal.Body>
+      <div className="scope-controls modal-controls"><fieldset><legend>Platform</legend>{['console','pc'].map(value => <button key={value} className={scope.platform === value ? 'active' : ''} onClick={() => setScope(s => ({...s, platform:value}))}>{value === 'pc' ? 'PC' : 'Console'}</button>)}</fieldset><fieldset><legend>Game mode</legend>{['competitive','quickplay'].map(value => <button key={value} className={scope.gamemode === value ? 'active' : ''} onClick={() => setScope(s => ({...s, gamemode:value}))}>{value === 'quickplay' ? 'Quick Play' : 'Competitive'}</button>)}</fieldset></div>
+      <p className="scope-note compact">Every statistic below is scoped to <strong>{label}</strong>.</p>
+      {status === 'loading' ? <div className="modal-skeleton"><div className="skeleton ranks"/><div className="skeleton heroes"/></div> : status === 'error' ? <div className="empty-state panel">Statistics are unavailable for this selection. Try another mode or platform.</div> : <>
+        {scope.gamemode === 'competitive' && <section><div className="section-heading"><h3>Competitive Role Ranks</h3><small>{scope.platform === 'pc' ? 'PC' : 'Console'}</small></div><div className="rank-grid detailed">{ROLES.map(item => { const rank=ranks[item]; return <div key={item}><span>{capitalize(item)}</span>{rank?.rank_icon && <img src={rank.rank_icon} alt=""/>}<strong>{rank?.division ? `${capitalize(rank.division)} ${rank.tier}` : 'Unranked'}</strong></div>})}</div></section>}
+        <section><div className="section-heading"><h3>General Statistics</h3><small>{label}</small></div><div className="stat-grid"><div><span>Time Played</span><strong>{formatDuration(general.time_played)}</strong></div><div><span>Games Played</span><strong>{formatNumber(general.games_played)}</strong></div><div><span>Win Rate</span><strong>{formatPercent(general.winrate)}</strong></div><div><span>KDA</span><strong>{formatNumber(general.kda)}</strong></div><div><span>Avg. Eliminations</span><strong>{formatNumber(general.average?.eliminations)}</strong></div><div><span>Avg. Damage</span><strong>{formatNumber(general.average?.damage)}</strong></div></div></section>
+        <section><div className="section-heading"><h3>Hero Statistics</h3><small>{heroRows.length} heroes · {label}</small></div><div className="toolbar"><div>{['all','tank','damage','support'].map(value => <button className={role === value ? 'active' : ''} onClick={() => setRole(value)} key={value}>{capitalize(value)}</button>)}</div><label>Sort <select value={sort} onChange={event => setSort(event.target.value)}>{Object.entries(SORTS).map(([value,text]) => <option value={value} key={value}>{text}</option>)}</select></label></div>
+        <div className="hero-stats-list">{heroRows.length ? heroRows.map(([key,hero]) => <article key={key}><img src={metadata[key]?.portrait} alt=""/><div className="hero-stat-name"><strong>{metadata[key]?.name || capitalize(key)}</strong><span>{capitalize(metadata[key]?.role)}</span></div><dl><div><dt>Time</dt><dd>{formatDuration(hero.time_played)}</dd></div><div><dt>Win rate</dt><dd>{formatPercent(hero.winrate)}</dd></div><div><dt>KDA</dt><dd>{formatNumber(hero.kda)}</dd></div><div><dt>Avg. damage</dt><dd>{formatNumber(hero.average?.damage)}</dd></div><div><dt>Avg. eliminations</dt><dd>{formatNumber(hero.average?.eliminations)}</dd></div></dl></article>) : <p className="empty-state panel">No hero statistics are available for this selection.</p>}</div></section>
+      </>}
+    </Modal.Body>
+  </Modal>;
+}
