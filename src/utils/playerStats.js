@@ -12,6 +12,18 @@ export function formatDuration(seconds) {
 export const formatNumber = value => Number.isFinite(Number(value)) ? new Intl.NumberFormat().format(Number(value)) : '—';
 export const formatPercent = value => Number.isFinite(Number(value)) ? `${Number(value).toFixed(1).replace('.0', '')}%` : '—';
 
+export function formatProfileUpdated(value, now = Date.now()) {
+  if (!value) return '';
+  const timestamp = new Date(value).getTime();
+  if (!Number.isFinite(timestamp)) return '';
+  const minutes = Math.floor(Math.max(0, Number(now) - timestamp) / 60_000);
+  if (minutes < 1) return 'Blizzard profile updated just now';
+  if (minutes < 60) return `Blizzard profile updated ${minutes} min ago`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `Blizzard profile updated ${hours} hr${hours === 1 ? '' : 's'} ago`;
+  return `Blizzard profile updated ${new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(timestamp)}`;
+}
+
 export function getTopHeroes(heroes = {}, limit = 3) {
   return Object.entries(heroes || {})
     .filter(([, stats]) => Number.isFinite(Number(stats?.time_played)))

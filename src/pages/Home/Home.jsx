@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 import PlayerCard from './PlayerCard';
 import profiles from '../../profiles.json';
@@ -10,30 +10,27 @@ export default function Home() {
   const [scope, setScope] = useState(DEFAULT_SCOPE);
   const [favorite, setFavorite] = useState(() => Cookies.get('user') || '');
   const [players, setPlayers] = useState(() => Object.fromEntries(profiles.map(player => [player, { status: 'loading' }])));
-  const [retry, setRetry] = useState(0);
   const [heroes, setHeroes] = useState([]);
+  const requests = useRef({});
 
   useEffect(() => {
     Cookies.set('profiles', profiles.join(','), { expires: 90 });
     getHeroes().then(setHeroes).catch(() => setHeroes([]));
   }, []);
 
-  useEffect(() => {
-    let active = true;
-    setPlayers(Object.fromEntries(profiles.map(player => [player, { status: 'loading' }])));
-    profiles.forEach(async player => {
-      try {
-        const [summary, stats] = await Promise.all([
-          getPlayerSummary(player),
-          getPlayerStats(player, scope),
-        ]);
-        if (active) setPlayers(previous => ({ ...previous, [player]: { status: 'ready', summary, stats } }));
-      } catch (error) {
-        if (active) setPlayers(previous => ({ ...previous, [player]: { status: 'error', error } }));
-      }
-    });
-    return () => { active = false; };
-  }, [scope, retry]);
+  const loadPlayer = useCallback(async player => {
+    const request = (requests.current[player] || 0) + 1;
+    requests.current[player] = request;
+    setPlayers(previous => ({ ...previous, [player]: { ...previous[player], status: 'loading' } }));
+    try {
+      const [summary, stats] = await Promise.all([getPlayerSummary(player), getPlayerStats(player, scope)]);
+      if (requests.current[player] === request) setPlayers(previous => ({ ...previous, [player]: { status: 'ready', summary, stats } }));
+    } catch (error) {
+      if (requests.current[player] === request) setPlayers(previous => ({ ...previous, [player]: { status: 'error', error } }));
+    }
+  }, [scope]);
+
+  useEffect(() => { profiles.forEach(loadPlayer); }, [loadPlayer]);
 
   const toggleFavorite = player => {
     const next = favorite === player ? '' : player;
@@ -43,7 +40,7 @@ export default function Home() {
 
   const retryPlayer = player => {
     clearPlayerCache(player);
-    setRetry(value => value + 1);
+    loadPlayer(player);
   };
 
   return (
